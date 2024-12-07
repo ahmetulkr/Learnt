@@ -13,15 +13,26 @@ namespace LearntMVCProject.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+       
+
+        public IActionResult Category()
+        {
+            return View();
+        }
+        public IActionResult Home()
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+
+        }
+        public IActionResult Contact()
         {
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
