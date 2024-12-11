@@ -41,28 +41,28 @@ body {
 
 @keyframes glow {
     0% {
-        background: linear-gradient(135deg, #ffffff, #808080);
+        background: linear-gradient(135deg, #0cb0d4, #0b5048);
         background-position: 0% 50%;
     }
 
     50% {
-        background: linear-gradient(50deg, #ffffff, #808080);
+        background: linear-gradient(50deg, #0cb0d4, #0b5048);
         background-position: 100% 50%;
     }
 
     100% {
-        background: linear-gradient(-100deg, #ffffff, #808080);
+        background: linear-gradient(-100deg, #0cb0d4, #0b5048);
         background-position: 0% 50%;
     }
 }
 
 .btn-custom {
-    background: linear-gradient(135deg, #ffffff, #808080);
-    color: white;
+    background: linear-gradient(135deg, #0cb0d4, #0b5048);
+    color: blue;
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    animation: pulse 3s infinite; /* Animasyonu sürekli döngüye al */
+    transition: all 0.1s ease;
+    animation: pulse 1s infinite; /* Animasyonu sürekli döngüye al */
 }
 
     
@@ -194,3 +194,7 @@ body {
     .nav-font-size{
         font-size:13px;
     }
+/* Layout Login Button */
+
+.laybutton-color{
+ 
