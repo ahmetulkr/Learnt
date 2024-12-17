@@ -57,7 +57,7 @@ body {
 }
 
 .btn-custom {
-    background: linear-gradient(135deg, #0cb0d4, #0b5048);
+    background: linear-gradient(177deg, #0cb0d4, #0b5048);
     color: blue;
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -197,4 +197,7 @@ body {
 /* Layout Login Button */
 
 .laybutton-color{
+color: white;
+
+}
  
