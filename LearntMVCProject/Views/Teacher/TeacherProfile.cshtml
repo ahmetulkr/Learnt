@@ -1,0 +1,19 @@
+﻿<h1>Welcome, @Model.Username</h1>
+
+<img src="@Model.ProfilePicture" alt="Profile Picture" width="100" height="100" />
+<p>@Model.Bio</p>
+
+<h2>Your Courses</h2>
+<ul>
+    @foreach (var course in ViewBag.Courses)
+    {
+        <li>@course.Name - @course.Description</li>
+    }
+</ul>
+
+<h2>Add a New Course</h2>
+<form asp-action="AddCourse" method="post">
+    <input type="text" name="Name" placeholder="Course Name" required />
+    <textarea name="Description" placeholder="Course Description" required></textarea>
+    <button type="submit">Add Course</button>
+</form>

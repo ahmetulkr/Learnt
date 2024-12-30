@@ -1,0 +1,29 @@
+﻿@model LearntMVCProject.Models.AppUser
+@{
+        ViewBag.Title = "Register";
+
+}
+<h2>Kayıt Ol</h2>
+<form method="post" action="/Account/Register">
+    <div class="form-group">
+        <label for="Username">Kullanıcı Ado</label>
+        <input type="text" name="Username" class="form-control-plaintext" required />
+    </div>
+
+    <div>
+        <label for="Email">Email</label>
+        <input type="email" name="Email" class="form-control-plaintext" required />
+    </div>
+
+
+    <div class="form-group">
+        <label for="Password">Şifre</label>
+        <input type="password" name="Password" class="form-control-plaintext" required />
+    </div> 
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+    <button type="submit" class="btn btn-success">Kayıt Ol</button>
+
+</form>

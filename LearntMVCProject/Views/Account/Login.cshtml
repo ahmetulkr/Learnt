@@ -1,8 +1,23 @@
-﻿@*
-
-
-*@
+﻿@model LearntMVCProject.Models.AppUser
 @{
-    
+    ViewBag.Title = "Login";
 }
-<h1>Login</h1>
+<h2>Giriş Yap</h2>
+
+<form method="post" action="/Account/Login">>
+ <div class="form-group">
+     <label for="Username">Kullanıcı Adı</label>
+     <input type="text" name="Username" class="form-control" required />
+</div>    
+<div class="form-group">
+    <label for="Password">Şifre</label>
+    <input type="password" name="Password" class="form-control" required />
+
+
+</div>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+<button type="submit" class="btn btn-success">Giriş Yap</button>
+</form>
