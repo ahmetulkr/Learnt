@@ -16,12 +16,7 @@ namespace LearntMVCProject.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        public string Role { get; set; }
-        [Required]
-        public string ProfilePicture { get; set; } 
-        [Required]
-
-        public string Bio { get; set; }
+      
 
     }
 }

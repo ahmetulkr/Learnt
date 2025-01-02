@@ -45,15 +45,7 @@ namespace LearntMVCProject.Controllers
             if (loginUser != null)
             {
                 HttpContext.Session.SetString("Username", loginUser.Username);
-                HttpContext.Session.SetString("Role", loginUser.Role);
-                if (loginUser.Role=="Teacher")
-                {
-                    return RedirectToAction("TeacherProfile", "Teacher", new { id = loginUser.Id });
-                }
-                else if (loginUser.Role== "Student")
-                {
-                    return RedirectToAction("StudentProfile", "Student", new { id = loginUser.Id });
-                }
+               
                 
             }
             ViewBag.Error = "Invalid Username or Password";
