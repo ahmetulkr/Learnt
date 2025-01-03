@@ -1,0 +1,16 @@
+﻿@model LearntMVCProject.Models.UserProfile
+
+<h2>Profiliniz</h2>
+
+<form asp-action="UpdateProfile" method="post">
+    <label>Ad Soyad:</label>
+    <input type="text" name="FullName" value="@Model?.FullName" required />
+
+    <label>Biyografi:</label>
+    <textarea name="Bio">@Model?.Bio</textarea>
+
+    <label>Profil Resmi URL:</label>
+    <input type="text" name="ProfilePictureUrl" value="@Model?.ProfilePictureUrl" />
+
+    <button type="submit">Güncelle</button>
+</form>

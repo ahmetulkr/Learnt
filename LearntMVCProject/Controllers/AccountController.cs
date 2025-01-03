@@ -39,18 +39,37 @@ namespace LearntMVCProject.Controllers
 
 
         [HttpPost]
-        public ActionResult Login(AppUser user)
+        public IActionResult Login(string username, string password)
+{
+    var user = db.GetUser(username, password);
+
+    if (user != null)
+    {
+        HttpContext.Session.SetInt32("UserId", user.Id);
+        return RedirectToAction("Profile", "Account");
+    }
+
+    ViewBag.Error = "Geçersiz kullanıcı adı veya şifre.";
+    return View();
+}
+
+public IActionResult Profile()
+{
+    var userId = HttpContext.Session.GetInt32("UserId");
+
+    if (userId == null)
+    {
+        // Kullanıcı giriş yapmamışsa sadece bir kez login sayfasına yönlendir.
+        if (HttpContext.Request.Path != "/Account/Login")
         {
-            var loginUser = db.GetUser(user.Username, user.Password);
-            if (loginUser != null)
-            {
-                HttpContext.Session.SetString("Username", loginUser.Username);
-               
-                
-            }
-            ViewBag.Error = "Invalid Username or Password";
-            return View(user);
+            return RedirectToAction("Login", "Account");
         }
+    }
+
+    var profile = db.GetProfile((int)userId);
+    return View(profile);
+}
+
         public ActionResult LogOut()
         {
             HttpContext.Session.Clear();

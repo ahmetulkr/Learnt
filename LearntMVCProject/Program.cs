@@ -6,8 +6,8 @@ builder.Services.AddControllersWithViews();
 // Add session services
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session süresi
-    options.Cookie.HttpOnly = true;                // Tarayýcýdan eriþim kýsýtlamasý
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session sï¿½resi
+    options.Cookie.HttpOnly = true;                // Tarayï¿½cï¿½dan eriï¿½im kï¿½sï¿½tlamasï¿½
     options.Cookie.IsEssential = true;             // GDPR uyumu
 });
 
@@ -33,5 +33,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Home}/{id?}");
+    
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Account}/{action=Login}/{id?}"
+);
 
 app.Run();
