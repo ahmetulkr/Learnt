@@ -27,6 +27,27 @@ namespace LearntMVCProject.Controllers
         {
             return View();
         }
+        
+        public IActionResult Lessons(){
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("LessonLogin", "Account");
+            }
+            return View();
+        }
+
+        public IActionResult Index()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("LessonLogin", "Account");
+            }
+
+            return View();
+        }
 
     }
 }

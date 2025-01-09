@@ -1,16 +1,20 @@
 ﻿@model LearntMVCProject.Models.UserProfile
 
-<h2>Profiliniz</h2>
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="@(Model?.ProfilePictureUrl ?? "/images/default-avatar.png")" 
+             alt="Profil Resmi" 
+             class="profile-picture" />
+        <h1>@(Model?.FullName ?? "Bilinmeyen Kullanıcı")</h1>
+    </div>
 
-<form asp-action="UpdateProfile" method="post">
-    <label>Ad Soyad:</label>
-    <input type="text" name="FullName" value="@Model?.FullName" required />
+    <div class="profile-bio">
+        <h3>Biyografi</h3>
+        <p>@(Model?.Bio ?? "Henüz biyografi eklenmedi.")</p>
+    </div>
 
-    <label>Biyografi:</label>
-    <textarea name="Bio">@Model?.Bio</textarea>
-
-    <label>Profil Resmi URL:</label>
-    <input type="text" name="ProfilePictureUrl" value="@Model?.ProfilePictureUrl" />
-
-    <button type="submit">Güncelle</button>
-</form>
+    <div class="profile-actions">
+        <a href="/Account/EditProfile" class="btn btn-primary">Profili Düzenle</a>
+        <a href="/Account/Logout" class="btn btn-danger">Çıkış Yap</a>
+    </div>
+</div>

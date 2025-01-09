@@ -1,40 +1,88 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .shadow-box {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+﻿  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Python Lesson with Video and Compiler</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+      <style>
+          .containers {
+              display: flex;
+              flex-direction: column;
+              height: 100vh;
+          }
+          .video-section, .compiler-section {
+              width: 100%;
+              padding: 20px;
+          }
+          .video-section iframe, .compiler-section iframe {
+              width: 100%;
+              height: 500px;
+          }
+          .video-list-section {
+              width: 100%;
+              background-color: #f8f9fa;
+              padding: 10px;
+              border-bottom: 2px solid #ddd;
+              display: flex;
+              justify-content: center;
+          }
+          .video-list a {
+              margin: 0 15px;
+              padding: 10px;
+              background-color: #e9ecef;
+              text-decoration: none;
+              color: #333;
+              border-radius: 5px;
+          }
+          .video-list a:hover {
+              background-color: #dee2e6;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="containers">
+          <!-- Video List Section -->
+          <div class="video-list-section">
+              <h3 class="me-3">Python Lessons</h3>
+              <div class="video-list">
+                  <a href="#" onclick="changeVideo('https://www.youtube.com/embed/rfscVS0vtbw')">Full Course</a>
+                  <a href="#" onclick="changeVideo('https://www.youtube.com/embed/8DvywoWv6fI')">For Beginners</a>
+                  <a href="#" onclick="changeVideo('https://www.youtube.com/embed/WGJJIrtnfpk')">Advanced</a>
+              </div>
+          </div>
+          
+          <!-- Video Section -->
+          <div class="video-section">
+              <h2>Lesson Video</h2>
+              <iframe id="lesson-video" src="https://www.youtube.com/embed/rfscVS0vtbw" 
+                  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
+                  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+              </iframe>
+          </div>
+          
+          <!-- Python Compiler Section -->
+          <div class="compiler-section">
+              <h2>Python Online Compiler</h2>
+              <p>Edit and run Python code directly here:</p>
+              <iframe height="500" scrolling="no" title="Python Compiler" 
+                  src="https://trinket.io/embed/python3" 
+                  frameborder="no" loading="lazy" allowtransparency="true" 
+                  allowfullscreen="true">
+              </iframe>
+          </div>
+      </div>
+      <script>
+          function changeVideo(url) {
+              document.getElementById('lesson-video').src = url;
+          }
+      </script>
+      @if (Context.Session.GetInt32("UserId") == null)
+       {
+    <script>
+        window.location.href = "/Account/LessonLogin";
+    </script>
         }
-    </style>
-</head>
-<body>
-    <div class="grid-background-lesson">
-        <div class="content">
-            <!-- Orijinal grid-background alanı burada kalıyor -->
-        </div>
-    </div>
-
-    <!-- Yeni layout burada başlıyor, gridin üstünde ve dolu içerikli -->
-    <div class="container position-absolute top-50 start-50 translate-middle">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="row mb-3">
-                    <div class="col-12 p-5 rounded shadow-box bg-light border"></div>
-                </div>
-                <div class="row">
-                    <div class="col-12 p-5 rounded shadow-box bg-light border gridcoteiner"></div>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="p-5 rounded shadow-box bg-light border h-100"></div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>

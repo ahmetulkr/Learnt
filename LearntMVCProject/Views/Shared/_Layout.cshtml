@@ -1,15 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title - Your Website</title>
+    <title>Learnt.</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/css/mysite.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-
-    </style>
 </head>
 <body>
     <header class="mb-auto">
@@ -30,8 +26,8 @@
                             <a class="nav-link dropdown-toggle" href="#" id="lessonDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Lesson
                             </a>
-                            <ul class="dropdown-menu  " aria-labelledby="lessonDropdown" style="height: 400px; width: 450px;">
-                                <li><a class="dropdown-item" href="@Url.Action("Html", "Lessons")">HTML</a></li>
+                            <ul class="dropdown-menu" aria-labelledby="lessonDropdown" style="height: 400px; width: 450px;">
+                                <li><a class="dropdown-item" href="@Url.Action("Html", "Lessons")">Python</a></li>
                                 <li><a class="dropdown-item" href="@Url.Action("Css", "Lessons")">CSS</a></li>
                                 <li><a class="dropdown-item" href="@Url.Action("Javascript", "Lessons")">JavaScript</a></li>
                             </ul>
@@ -45,20 +41,27 @@
                     </ul>
                 </div>
 
-                <!-- Butonlar -->
+                <!-- Giriş Kontrolü -->
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-custom text-light rounded-pill px-3 btn-margins" href="@Url.Action("Login", "Account")">Log In</a>
-                    <a class="btn btn-custom btn text-light rounded-pill px-3" href="@Url.Action("Register", "Account")">Sign Up</a>
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {   
+                        <a class="btn btn-custom text-light rounded-pill px-3 btn-margins" href="@Url.Action("Profile", "Account")">Profilim</a>
+                        <a class="btn btn-custom btn-danger text-light rounded-pill px-3" href="@Url.Action("LogOut", "Account")">Çıkış Yap</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-custom text-light rounded-pill px-3 btn-margins" href="@Url.Action("Login", "Account")">Log In</a>
+                        <a class="btn btn-custom btn-primary text-light rounded-pill px-3" href="@Url.Action("Register", "Account")">Sign Up</a>
+                    }
                 </div>
             </div>
         </nav>
     </header>
 
-
     <div>
         @RenderBody()
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

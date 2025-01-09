@@ -2,22 +2,95 @@
 @{
     ViewBag.Title = "Login";
 }
-<h2>Giriş Yap</h2>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #000000; /* Siyah arka plan */
+    }
 
-<form method="post" action="/Account/Login">>
- <div class="form-group">
-     <label for="Username">Kullanıcı Adı</label>
-     <input type="text" name="Username" class="form-control" required />
-</div>    
-<div class="form-group">
-    <label for="Password">Şifre</label>
-    <input type="password" name="Password" class="form-control" required />
+    main {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000000; /* Siyah arka plan */
+        background-image: 
+            linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px); /* Grid deseni */
+        background-size: 40px 40px; /* Grid boyutu */
+    }
 
+    form {
+        position: relative;
+        background: #000000; /* Koyu gri form arka planı */
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 1; /* Formun üstte görünmesini sağlamak için */
+    }
 
-</div>
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
-<button type="submit" class="btn btn-success">Giriş Yap</button>
-</form>
+    h2 {
+        color: #fff;
+    }
+
+    label {
+        color: #ddd;
+    }
+
+    .form-control {
+        background: #ffffff;
+        color: #ffffff;
+        border: 1px solid #ffffff;
+    }
+
+    .form-control:focus {
+        background: #ffffff;
+        border-color: #ffffff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>
+
+<main>
+    <form method="post" action="/Account/Login" class="p-4  rounded shadow-sm" style="max-width: 400px; width: 100%;">
+        <div class="text-center mb-4">
+            <i class="fas fa-user-circle fa-3x text-primary"></i>
+        </div>
+       
+        <div class="form-group mb-3">
+            <label for="Username" class="form-label">Kullanıcı Adı</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="Username" class="form-control" placeholder="Kullanıcı adınızı girin" required />
+            </div>
+        </div>    
+        <div class="form-group mb-3">
+            <label for="Password" class="form-label">Şifre</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="Password" class="form-control" placeholder="Şifrenizi girin" required />
+            </div>
+        </div>
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success">Giriş Yap</button>
+        </div>
+        <div class="text-center mt-3">
+            <a href="/Account/Register" class="text-decoration-none">Hesabınız yok mu? Kayıt olun</a>
+        </div>
+    </form>
+</main>

@@ -1,0 +1,40 @@
+﻿@model LearntMVCProject.Models.UserProfile
+
+<h2>Profil Düzenle</h2>
+
+<form asp-controller="Account" asp-action="EditProfile" method="post">
+    <div class="form-group">
+        <label asp-for="FullName">Ad Soyad</label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Bio">Biyografi</label>
+        <textarea asp-for="Bio" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProfilePictureUrl">Profil Resmi URL</label>
+        <input asp-for="ProfilePictureUrl" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+<script>
+    $("#profileForm").submit(function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: '/Account/EditProfile',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+            window.location.href = "/Account/Profile";
+        },
+        error: function () {
+            alert("Kaydetme işlemi sırasında bir hata oluştu.");
+        }
+    });
+});
+
+</script>

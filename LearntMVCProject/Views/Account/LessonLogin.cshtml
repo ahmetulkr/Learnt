@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Lesson Login";
+}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #000000; /* Siyah arka plan */
+    }
+
+    main {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000000; /* Siyah arka plan */
+        background-image: 
+            linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px); /* Grid deseni */
+        background-size: 40px 40px; /* Grid boyutu */
+    }
+
+    form {
+        position: relative;
+        background: #292929; /* Koyu gri form arka planı */
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+        z-index: 1;
+    }
+
+    h2 {
+        color: #fff;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    label {
+        color: #ddd;
+    }
+
+    .form-control {
+        background: #444;
+        color: #fff;
+        border: 1px solid #555;
+        padding: 0.5rem;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    .form-control:focus {
+        background: #555;
+        border-color: #777;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .text-danger {
+        color: #f44336;
+        text-align: center;
+        margin-top: 1rem;
+    }
+</style>
+
+<main>
+    <form method="post" action="@Url.Action("LessonLogin", "Account")">
+        <h2>Lesson Login</h2>
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="text-danger">@ViewBag.Error</div>
+        }
+
+        <button type="submit" class="btn btn-primary">Login to Course</button>
+    </form>
+</main>

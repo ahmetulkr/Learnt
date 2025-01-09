@@ -1,29 +1,112 @@
 ﻿@model LearntMVCProject.Models.AppUser
 @{
-        ViewBag.Title = "Register";
-
+    ViewBag.Title = "Register";
 }
-<h2>Kayıt Ol</h2>
-<form method="post" action="/Account/Register">
-    <div class="form-group">
-        <label for="Username">Kullanıcı Ado</label>
-        <input type="text" name="Username" class="form-control-plaintext" required />
-    </div>
-
-    <div>
-        <label for="Email">Email</label>
-        <input type="email" name="Email" class="form-control-plaintext" required />
-    </div>
-
-
-    <div class="form-group">
-        <label for="Password">Şifre</label>
-        <input type="password" name="Password" class="form-control-plaintext" required />
-    </div> 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">@ViewBag.Error</div>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #000000; /* Siyah arka plan */
     }
-    <button type="submit" class="btn btn-success">Kayıt Ol</button>
 
-</form>
+    main {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000000; /* Siyah arka plan */
+        background-image: 
+            linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px); /* Grid deseni */
+        background-size: 40px 40px; /* Grid boyutu */
+    }
+
+    form {
+        position: relative;
+        background: #000000; /* Koyu gri form arka planı */
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+        z-index: 1;
+    }
+
+    h2 {
+        color: #fff;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    label {
+        color: #ddd;
+    }
+
+    .form-control-plaintext {
+        background: #ffffff;
+        color: #fff;
+        border: 1px solid #555;
+        padding: 0.5rem;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    .form-control-plaintext:focus {
+        background: #ffffff;
+        border-color: #ffffff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 4px;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    .alert-danger {
+        color: #fff;
+        background-color: #f44336;
+        border: 1px solid #f44336;
+        margin-top: 1rem;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+<main>
+    <form method="post" action="/Account/Register">
+        
+
+        <div class="form-group mb-3">
+            <label for="Username">Kullanıcı Adı</label>
+            <input type="text" name="Username" class="form-control-plaintext" placeholder="Kullanıcı adınızı girin" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="Email">Email</label>
+            <input type="email" name="Email" class="form-control-plaintext" placeholder="Email adresinizi girin" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="Password">Şifre</label>
+            <input type="password" name="Password" class="form-control-plaintext" placeholder="Şifrenizi girin" required />
+        </div> 
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        <button type="submit" class="btn btn-success">Kayıt Ol</button>
+    </form>
+</main>
