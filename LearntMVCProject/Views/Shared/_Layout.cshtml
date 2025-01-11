@@ -26,7 +26,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="lessonDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Lesson
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="lessonDropdown" style="height: 400px; width: 450px;">
+                            <ul class="dropdown-menu" aria-labelledby="lessonDropdown" >
                                 <li><a class="dropdown-item" href="@Url.Action("Html", "Lessons")">Python</a></li>
                                 <li><a class="dropdown-item" href="@Url.Action("Css", "Lessons")">CSS</a></li>
                                 <li><a class="dropdown-item" href="@Url.Action("Javascript", "Lessons")">JavaScript</a></li>
@@ -35,9 +35,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("About", "Home")">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a>
-                        </li>
+                         
                     </ul>
                 </div>
 
@@ -45,14 +43,15 @@
                 <div class="d-flex align-items-center">
                     @if (Context.Session.GetInt32("UserId") != null)
                     {   
-                        <a class="btn btn-custom text-light rounded-pill px-3 btn-margins" href="@Url.Action("Profile", "Account")">Profilim</a>
-                        <a class="btn btn-custom btn-danger text-light rounded-pill px-3" href="@Url.Action("LogOut", "Account")">Çıkış Yap</a>
+                        <a class="btn btn-light text-dark rounded-pill px-3 btn-margins" href="@Url.Action("Profile", "Account")">Profilim</a>
+
                     }
                     else
                     {
-                        <a class="btn btn-custom text-light rounded-pill px-3 btn-margins" href="@Url.Action("Login", "Account")">Log In</a>
-                        <a class="btn btn-custom btn-primary text-light rounded-pill px-3" href="@Url.Action("Register", "Account")">Sign Up</a>
+                        <a class="btn btn-outline-dark text-white rounded-pill px-3 btn-margins" href="@Url.Action("Login", "Account")" style="border-width: 1px;">Log In</a>
+                        <a class="btn btn-light text-dark rounded-pill px-3" href="@Url.Action("Register", "Account")">Sign Up</a>
                     }
+                </div>
                 </div>
             </div>
         </nav>

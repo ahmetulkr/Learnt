@@ -302,10 +302,7 @@ body {
     }
 
   
-      
-    .newfont{
-        font-family: 'Yeyey', sans-serif;
-    }
+    
 
     /* Home Main Kısmı */
 
@@ -324,5 +321,6 @@ body {
         display: flex;
         gap: 20px;
     }
-
+    
+   
     

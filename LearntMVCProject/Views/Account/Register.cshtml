@@ -46,7 +46,7 @@
 
     .form-control-plaintext {
         background: #ffffff;
-        color: #fff;
+        color: #000000;
         border: 1px solid #555;
         padding: 0.5rem;
         border-radius: 4px;
@@ -85,21 +85,21 @@
 
 <main>
     <form method="post" action="/Account/Register">
-        
-
+    
+<img class="d-block mx-auto mb-4" src="/Resource/logo2.png" alt="Logo" height="75">
         <div class="form-group mb-3">
-            <label for="Username">Kullanıcı Adı</label>
-            <input type="text" name="Username" class="form-control-plaintext" placeholder="Kullanıcı adınızı girin" required />
+            <label for="Username" style="margin-top: 50px;">Username Adı</label>
+            <input type="text" name="Username" class="form-control-plaintext" placeholder="Username" required />
         </div>
 
         <div class="form-group mb-3">
             <label for="Email">Email</label>
-            <input type="email" name="Email" class="form-control-plaintext" placeholder="Email adresinizi girin" required />
+            <input type="email" name="Email" class="form-control-plaintext" placeholder="E-mail" required />
         </div>
 
         <div class="form-group mb-3">
-            <label for="Password">Şifre</label>
-            <input type="password" name="Password" class="form-control-plaintext" placeholder="Şifrenizi girin" required />
+            <label for="Password">Password</label>
+            <input type="password" name="Password" class="form-control-plaintext" placeholder="Password" required />
         </div> 
 
         @if (ViewBag.Error != null)
@@ -107,6 +107,6 @@
             <div class="alert alert-danger text-center">@ViewBag.Error</div>
         }
 
-        <button type="submit" class="btn btn-success">Kayıt Ol</button>
+        <button type="submit" class="btn btn-outline-dark text-white rounded-pill px-3 btn-margins" style="margin-top: 59px;border-width: 1px;width: 327px;">Sign Up</button>
     </form>
 </main>
