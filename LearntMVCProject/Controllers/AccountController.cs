@@ -139,25 +139,26 @@ public IActionResult EditProfile(UserProfile profile)
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "Account");
         }
-         public IActionResult LessonLogin()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult LessonLogin(string username, string password, string course)
-        {
-            var user = db.GetUser(username, password);
 
-            if (user != null)
-            {
-                HttpContext.Session.SetInt32("UserId", user.Id);
+        // public IActionResult LessonLogin()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public IActionResult LessonLogin(string username, string password, string course)
+        //{
+        //    var user = db.GetUser(username, password);
+
+        //    if (user != null)
+        //    {
+        //        HttpContext.Session.SetInt32("UserId", user.Id);
 
                
-                 return RedirectToAction("Home", "Home");
-            }
+        //         return RedirectToAction("Home", "Home");
+        //    }
 
-            ViewBag.Error = "Invalid username or password.";
-            return View();
-        }
+        //    ViewBag.Error = "Invalid username or password.";
+        //    return View();
+        //}
     }
 }

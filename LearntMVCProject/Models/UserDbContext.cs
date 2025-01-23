@@ -22,7 +22,7 @@ namespace LearntMVCProject.Models
                 cmd.ExecuteNonQuery();
             }
         }
-
+      
         // Kullanıcıyı username ve password ile getir
         public AppUser GetUser(string username, string password)
         {
@@ -122,6 +122,31 @@ namespace LearntMVCProject.Models
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
+        }
+        //Admin kullanıcıyı getirmek için
+        public Admin GetAdmin(string AdminUser, string AdminPassword)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Admin WHERE AdminUser = @AdminUser AND AdminPassword = @AdminPassword";
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@AdminUser", AdminUser);
+                cmd.Parameters.AddWithValue("@AdminPassword", AdminPassword);
+                con.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Admin
+                        {
+                            AdminId = reader.GetInt32(reader.GetOrdinal("AdminId")),
+                            AdminUser = reader["AdminUser"].ToString(),
+                            AdminPassword = reader["AdminPassword"].ToString()
+                        };
+                    }
+                }
+            }
+            return null;
         }
     }
 }
