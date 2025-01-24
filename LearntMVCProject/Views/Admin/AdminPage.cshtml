@@ -1,10 +1,128 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="aa.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/brands.min.css" integrity="sha512-58P9Hy7II0YeXLv+iFiLCv1rtLW47xmiRpC1oFafeKNShp8V5bKV/ciVtYqbk2YfxXQMt58DjNfkXFOn62xE+g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: #000000;
+            color: white;
+        }
+
+            .sidebar a {
+                color: #adb5bd;
+                text-decoration: none;
+            }
+
+                .sidebar a:hover {
+                    color: white;
+                }
+
+            .sidebar .nav-link.active {
+                background-color: #00ff62;
+                color: rgb(0, 0, 0);
+            }
+
+            .sidebar .user-profile img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+            }
+
+        .icons {
+            color: #00ff62;
+        }
+
+        .user-profile-border {
+            border: 1px solid #00ff62;
+        }
+
+        .logo {
+            margin-left: 68px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .buttoncolor {
+            background-color: #00ff62;
+            color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column flex-shrink-0 p-3">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-4">
+                    <img src="aa.png" class="logo" alt="logo">
+                </span>
+            </a>
+            <div class="user-profile d-flex align-items-center mb-3" style="margin: 1rem 0;">
+                <img src="https://avatars.githubusercontent.com/u/73017111?v=4" alt="Ahmet" class="me-2 user-profile-border">
+                <div>
+                    <div>Ahmet Ülker </div>
+
+                </div>
+
+
+                <a href="https://github.com/ahmetulkr">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github icons" viewBox="0 0 16 16" style="
+    margin-right: 10px;
+    margin-left: 10px;
+  ">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"></path>
+                    </svg>
+                </a>
+                <a href=" https://www.linkedin.com/in/ahmetulker/">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin icons" viewBox="0 0 16 16">
+                        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"></path>
+                    </svg>
+                </a>
+            </div>
+            <hr>
+
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-house-door-fill me-2"></i>
+                       Lesson
+                    </a>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="flex-grow-1 p-4">
+            <h1>Dersler</h1>
+            <div class="mb-3">
+                <input type="text" id="gorevInput" class="form-control" placeholder="Yeni bir görev ekle">
+                <button id="gorevEkleBtn" class="btn buttoncolor mt-2">Görev Ekle</button>
+            </div>
+            <ul id="gorevListesi" class="list-group">
+                <!-- Görevler burada görünecek -->
+            </ul>
+        </div>
+    </div>
+        
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+@if (Context.Session.GetString("Role") != "admin")
+{
+    <script>
+        window.location.href = "/Home/Home";
+    </script>
 }
-<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 20px 40px; padding: 40px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
-    <h1 style="border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">Under Construction</h1>
-    <p style="font-size: 18px; line-height: 1.6;">This page is currently under construction. Please check back later for updates.</p>
-    <p style="font-size: 18px; line-height: 1.6;">We are working hard to provide you with the best experience possible. Thank you for your patience.</p>
-</div>

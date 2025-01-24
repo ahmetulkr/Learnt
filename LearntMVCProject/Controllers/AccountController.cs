@@ -41,18 +41,30 @@ namespace LearntMVCProject.Controllers
 
         // Giriş işlemi
         [HttpPost]
+        [HttpPost]
         public IActionResult Login(string username, string password)
         {
-            var user = db.GetUser(username, password);
+            var user = db.GetUser(username, password); // Kullanıcıyı veritabanından al
 
             if (user != null)
             {
+                // Kullanıcı bilgilerini oturuma kaydet
                 HttpContext.Session.SetInt32("UserId", user.Id);
                 HttpContext.Session.SetString("Username", user.Username);
-                return RedirectToAction("Profile", "Account");
+                HttpContext.Session.SetString("Role", user.Role); // Kullanıcı rolünü sakla
+
+                // Rolüne göre yönlendir
+                if (user.Role == "admin")
+                {
+                    return RedirectToAction("AdminPage", "Admin");
+                }
+
+                // Normal kullanıcı için yönlendirme
+                return RedirectToAction("Home", "Home");
             }
 
-            ViewBag.Error = "Geçersiz kullanıcı adı veya şifre. Lütfen tekrar deneyin.";
+            // Hatalı giriş mesajı
+            ViewBag.Error = "Geçersiz kullanıcı adı veya şifre.";
             return View();
         }
 
@@ -140,25 +152,40 @@ public IActionResult EditProfile(UserProfile profile)
             return RedirectToAction("Login", "Account");
         }
 
-        // public IActionResult LessonLogin()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public IActionResult LessonLogin(string username, string password, string course)
-        //{
-        //    var user = db.GetUser(username, password);
+        public IActionResult LessonLogin()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult LessonLogin(string username, string password, string course)
+        {
+            var user = db.GetUser(username, password);
 
-        //    if (user != null)
-        //    {
-        //        HttpContext.Session.SetInt32("UserId", user.Id);
+            if (user != null)
+            {
+                HttpContext.Session.SetInt32("UserId", user.Id);
 
-               
-        //         return RedirectToAction("Home", "Home");
-        //    }
 
-        //    ViewBag.Error = "Invalid username or password.";
-        //    return View();
-        //}
+                return RedirectToAction("Home", "Home");
+            }
+
+            ViewBag.Error = "Invalid username or password.";
+            return View();
+        }
+
+        public IActionResult AdminPage()
+        {
+            // Oturumdan kullanıcı rolünü al
+            var userRole = HttpContext.Session.GetString("UserRole");
+
+            // Eğer kullanıcı admin değilse giriş sayfasına yönlendir
+            if (userRole != "Admin")
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            // Admin sayfasını döndür
+            return View();
+        }
     }
 }

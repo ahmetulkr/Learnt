@@ -1,4 +1,5 @@
 ﻿using LearntMVCProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 
@@ -6,37 +7,50 @@ namespace LearntMVCProject.Controllers
 {
     public class AdminController : Controller
     {
-        private UserDbContext dbContext = new UserDbContext();
-        public IActionResult Login()
+        //private UserDbContext db = new UserDbContext();
+        //public IActionResult AdminLogin()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public IActionResult AdminLogin(string adminUser, string adminPassword)
+        //{
+        //    // Veritabanından admin bilgilerini kontrol ediyoruz
+        //    var user = db.GetAdmin(adminUser, adminPassword);
+
+        //    if (user != null)
+        //    {
+        //        // Kullanıcı bilgilerini oturuma kaydediyoruz
+        //        HttpContext.Session.SetInt32("AdminId", user.AdminId);       // Admin ID
+        //        HttpContext.Session.SetString("AdminUser", user.AdminUser); // Admin Kullanıcı Adı
+
+
+        //        return RedirectToAction("AdminPage", "Admin");
+        //    }
+
+        //    // Kullanıcı bilgileri doğru değilse hata mesajı gösteriyoruz
+        //    ViewBag.Error = "Geçersiz kullanıcı adı veya şifre. Lütfen tekrar deneyin.";
+        //    return View("AdminLogin"); // Giriş sayfasını yeniden göster
+        //}
+
+
+
+        public IActionResult AdminPage()
         {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Login(Admin admin)
-        {
-         var user = dbContext.GetAdmin(admin.AdminUser, admin.AdminPassword);
-                if (user != null)
-                {
-                    HttpContext.Session.SetInt32("AdminId", user.AdminId);
-                    HttpContext.Session.SetString("AdminUser", user.AdminUser);
-                    return RedirectToAction("Login", "Admin"); 
-                }
-                ViewBag.Error = "Geçersiz kullanıcı adı veya şifre. Lütfen tekrar deneyin.";
-          return View(); 
-        }
-        public IActionResult Page()
-        {
-            var adminId = HttpContext.Session.GetInt32("AdminId");
-            if (adminId == null)
+            // Oturumdan kullanıcı rolünü al
+            var userRole = HttpContext.Session.GetString("Role");
+
+            // Eğer kullanıcı admin değilse giriş sayfasına yönlendir
+            if (userRole != "admin")
             {
-                return RedirectToAction("Login", "Admin");
+                return RedirectToAction("Home", "Home");
             }
 
-            // Pass the adminId to the view
-            ViewBag.AdminId = adminId;
-            return View("AdminPage"); // Ensure you have an AdminPage.cshtml view
+            // Admin sayfasını döndür
+            return View();
         }
 
-        
+
     }
 }

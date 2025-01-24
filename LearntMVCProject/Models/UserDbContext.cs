@@ -43,7 +43,8 @@ namespace LearntMVCProject.Models
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Username = reader["Username"].ToString(),
                             Password = reader["Password"].ToString(),
-                            Email = reader["Email"].ToString()
+                            Email = reader["Email"].ToString(),
+                            Role = reader["Role"].ToString()
                         };
                     }
                 }
@@ -51,7 +52,7 @@ namespace LearntMVCProject.Models
             return null;
         }
 
-        // Profil ekleme veya güncelleme
+        // User Düzenleme Yeri Profil ekleme veya güncelleme
         public void AddOrUpdateProfile(UserProfile profile)
         {
             using (var con = new NpgsqlConnection(connectionString))
@@ -124,29 +125,37 @@ namespace LearntMVCProject.Models
             }
         }
         //Admin kullanıcıyı getirmek için
-        public Admin GetAdmin(string AdminUser, string AdminPassword)
-        {
-            using (var con = new NpgsqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Admin WHERE AdminUser = @AdminUser AND AdminPassword = @AdminPassword";
-                var cmd = new NpgsqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@AdminUser", AdminUser);
-                cmd.Parameters.AddWithValue("@AdminPassword", AdminPassword);
-                con.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return new Admin
-                        {
-                            AdminId = reader.GetInt32(reader.GetOrdinal("AdminId")),
-                            AdminUser = reader["AdminUser"].ToString(),
-                            AdminPassword = reader["AdminPassword"].ToString()
-                        };
-                    }
-                }
-            }
-            return null;
-        }
+
+        //public Admin GetAdmin(string adminUser, string adminPassword)
+        //{
+        //    using (var con = new NpgsqlConnection(connectionString))
+        //    {
+        //        string query = "SELECT * FROM Admin WHERE AdminUser = @AdminUser AND AdminPassword = @AdminPassword";
+        //        var cmd = new NpgsqlCommand(query, con);
+
+        //        cmd.Parameters.AddWithValue("@AdminUser", NpgsqlTypes.NpgsqlDbType.Varchar, adminUser);
+        //        cmd.Parameters.AddWithValue("@AdminPassword", NpgsqlTypes.NpgsqlDbType.Varchar, adminPassword);
+
+        //        con.Open();
+
+        //        using (var reader = cmd.ExecuteReader())
+        //        {
+        //            if (reader.Read())
+        //            {
+        //                return new Admin
+        //                {
+        //                    AdminId = reader.GetInt32(reader.GetOrdinal("AdminId")),
+        //                    AdminUser = reader.GetString(reader.GetOrdinal("AdminUser")),
+        //                    AdminPassword = reader.GetString(reader.GetOrdinal("AdminPassword")),
+                            
+        //                };
+        //            }
+        //        }
+        //    }
+        //    return null;
+        
+
+
+
     }
 }
