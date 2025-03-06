@@ -1,6 +1,6 @@
-﻿@model List<LearntMVCProject.Models.Course>
+@model LearntMVCProject.Models.Course
 @{
-    ViewData["Title"] = "Admin Paneli";
+    ViewData["Title"] = "Ders Düzenle";
     Layout = null;
 }
 
@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Paneli - Dersler</title>
+    <title>Ders Düzenle - @Model.Name</title>
     <link rel="icon" type="image/png" href="~/aa.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -71,50 +71,32 @@
             padding: 20px;
         }
         
-        .card {
-            transition: transform 0.3s;
-            margin-bottom: 20px;
+        .form-control:focus, .form-select:focus {
+            border-color: #00ff62;
+            box-shadow: 0 0 0 0.25rem rgba(0, 255, 98, 0.25);
         }
         
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .dropdown-menu {
-            border-radius: 0;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .dropdown-item:hover {
+        .image-preview {
+            width: 100%;
+            height: 200px;
             background-color: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
         
-        .dropdown-submenu {
-            position: relative;
-        }
-        
-        .dropdown-submenu .dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -1px;
-        }
-        
-        .course-image {
-            height: 180px;
+        .image-preview img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
         
-        .course-actions {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: none;
-        }
-        
-        .card:hover .course-actions {
-            display: block;
+        .image-preview-placeholder {
+            text-align: center;
+            color: #6c757d;
         }
     </style>
 </head>
@@ -196,56 +178,90 @@
         <!-- Main Content -->
         <div class="content-wrapper">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Dersler</h1>
-                <a href="@Url.Action("AddCourse", "Admin")" class="btn buttoncolor">
-                    <i class="bi bi-plus-lg"></i> Yeni Ders Ekle
+                <h1>Ders Düzenle</h1>
+                <a href="@Url.Action("CourseDetails", "Admin", new { id = Model.Id })" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
                 </a>
             </div>
             
-            @if (Model != null && Model.Any())
-            {
-                <div class="row">
-                    @foreach (var course in Model)
-                    {
-                        <div class="col-md-4">
-                            <div class="card h-100">
-                                <div class="course-actions">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-three-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="@Url.Action("EditCourse", "Admin", new { id = course.Id })"><i class="bi bi-pencil me-2"></i>Düzenle</a></li>
-                                            <li><a class="dropdown-item" href="@Url.Action("DeleteCourse", "Admin", new { id = course.Id })" onclick="return confirm('Bu dersi silmek istediğinizden emin misiniz?');"><i class="bi bi-trash me-2"></i>Sil</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <img src="@(string.IsNullOrEmpty(course.ImageUrl) ? "/images/default-course.jpg" : course.ImageUrl)" class="card-img-top course-image" alt="@course.Name">
-                                <div class="card-body">
-                                    <h5 class="card-title">@course.Name</h5>
-                                    <p class="card-text">@(course.Description.Length > 100 ? course.Description.Substring(0, 100) + "..." : course.Description)</p>
-                                </div>
-                                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">Oluşturulma: @course.CreatedDate.ToString("dd.MM.yyyy")</small>
-                                    <a href="@Url.Action("CourseDetails", "Admin", new { id = course.Id })" class="btn btn-sm buttoncolor">
-                                        <i class="bi bi-eye me-1"></i> Detaylar
-                                    </a>
-                                </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="image-preview" id="imagePreview">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="@Model.Name" />
+                        }
+                        else
+                        {
+                            <div class="image-preview-placeholder">
+                                <i class="bi bi-image fs-1"></i>
+                                <p>Resim URL'si girildiğinde önizleme burada görünecek</p>
+                            </div>
+                        }
+                    </div>
+                    
+                    <form method="post" action="@Url.Action("EditCourse", "Admin")">
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="hidden" name="AdminId" value="@Model.AdminId" />
+                        <input type="hidden" name="CreatedDate" value="@Model.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                        
+                        <div class="mb-3">
+                            <label for="Name" class="form-label">Ders Adı</label>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="Description" name="Description" rows="4" required>@Model.Description</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="ImageUrl" class="form-label">Resim URL</label>
+                            <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" placeholder="https://example.com/image.jpg" onchange="updateImagePreview()">
+                            <div class="form-text">Ders için bir kapak resmi URL'si girin. Boş bırakırsanız varsayılan resim kullanılacaktır.</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="IsActive" name="IsActive" @(Model.IsActive ? "checked" : "")>
+                                <label class="form-check-label" for="IsActive">
+                                    Aktif
+                                </label>
                             </div>
                         </div>
-                    }
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("CourseDetails", "Admin", new { id = Model.Id })" class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-x-circle me-1"></i> İptal
+                            </a>
+                            <button type="submit" class="btn buttoncolor">
+                                <i class="bi bi-save me-1"></i> Kaydet
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            }
-            else
-            {
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle me-2"></i> Henüz hiç ders eklenmemiş. Yeni bir ders eklemek için "Yeni Ders Ekle" butonuna tıklayın.
-                </div>
-            }
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateImagePreview() {
+            const imageUrl = document.getElementById('ImageUrl').value;
+            const imagePreview = document.getElementById('imagePreview');
+            
+            if (imageUrl) {
+                imagePreview.innerHTML = `<img src="${imageUrl}" alt="Ders Resmi" onerror="this.onerror=null; this.src='/images/default-course.jpg'; this.alt='Resim yüklenemedi';" />`;
+            } else {
+                imagePreview.innerHTML = `
+                    <div class="image-preview-placeholder">
+                        <i class="bi bi-image fs-1"></i>
+                        <p>Resim URL'si girildiğinde önizleme burada görünecek</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
 
@@ -254,4 +270,4 @@
     <script>
         window.location.href = "/Home/Home";
     </script>
-}
+} 

@@ -124,38 +124,297 @@ namespace LearntMVCProject.Models
                 cmd.ExecuteNonQuery();
             }
         }
-        //Admin kullanıcıyı getirmek için
-
-        //public Admin GetAdmin(string adminUser, string adminPassword)
-        //{
-        //    using (var con = new NpgsqlConnection(connectionString))
-        //    {
-        //        string query = "SELECT * FROM Admin WHERE AdminUser = @AdminUser AND AdminPassword = @AdminPassword";
-        //        var cmd = new NpgsqlCommand(query, con);
-
-        //        cmd.Parameters.AddWithValue("@AdminUser", NpgsqlTypes.NpgsqlDbType.Varchar, adminUser);
-        //        cmd.Parameters.AddWithValue("@AdminPassword", NpgsqlTypes.NpgsqlDbType.Varchar, adminPassword);
-
-        //        con.Open();
-
-        //        using (var reader = cmd.ExecuteReader())
-        //        {
-        //            if (reader.Read())
-        //            {
-        //                return new Admin
-        //                {
-        //                    AdminId = reader.GetInt32(reader.GetOrdinal("AdminId")),
-        //                    AdminUser = reader.GetString(reader.GetOrdinal("AdminUser")),
-        //                    AdminPassword = reader.GetString(reader.GetOrdinal("AdminPassword")),
-                            
-        //                };
-        //            }
-        //        }
-        //    }
-        //    return null;
         
+        // Admin kullanıcıyı getirmek için
+        public Admin GetAdmin(string adminUser, string adminPassword)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Admin WHERE AdminUser = @AdminUser AND AdminPassword = @AdminPassword";
+                var cmd = new NpgsqlCommand(query, con);
 
+                cmd.Parameters.AddWithValue("@AdminUser", adminUser);
+                cmd.Parameters.AddWithValue("@AdminPassword", adminPassword);
 
+                con.Open();
 
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Admin
+                        {
+                            AdminId = reader.GetInt32(reader.GetOrdinal("AdminId")),
+                            AdminUser = reader.GetString(reader.GetOrdinal("AdminUser")),
+                            AdminPassword = reader.GetString(reader.GetOrdinal("AdminPassword")),
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+        
+        // Kurs ekleme
+        public int AddCourse(Course course)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = @"
+                    INSERT INTO Courses (Name, Description, ImageUrl, CreatedDate, IsActive, AdminId) 
+                    VALUES (@Name, @Description, @ImageUrl, @CreatedDate, @IsActive, @AdminId)
+                    RETURNING Id";
+                
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Name", course.Name);
+                cmd.Parameters.AddWithValue("@Description", course.Description);
+                cmd.Parameters.AddWithValue("@ImageUrl", course.ImageUrl ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@CreatedDate", course.CreatedDate);
+                cmd.Parameters.AddWithValue("@IsActive", course.IsActive);
+                cmd.Parameters.AddWithValue("@AdminId", course.AdminId);
+
+                con.Open();
+                return (int)cmd.ExecuteScalar();
+            }
+        }
+        
+        // Kurs güncelleme
+        public void UpdateCourse(Course course)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = @"
+                    UPDATE Courses 
+                    SET Name = @Name, 
+                        Description = @Description, 
+                        ImageUrl = @ImageUrl, 
+                        IsActive = @IsActive 
+                    WHERE Id = @Id";
+                
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Id", course.Id);
+                cmd.Parameters.AddWithValue("@Name", course.Name);
+                cmd.Parameters.AddWithValue("@Description", course.Description);
+                cmd.Parameters.AddWithValue("@ImageUrl", course.ImageUrl ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@IsActive", course.IsActive);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+        
+        // Kurs silme
+        public void DeleteCourse(int courseId)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                // Önce ilişkili videoları sil
+                string deleteVideosQuery = "DELETE FROM VideoLessons WHERE CourseId = @CourseId";
+                var deleteVideosCmd = new NpgsqlCommand(deleteVideosQuery, con);
+                deleteVideosCmd.Parameters.AddWithValue("@CourseId", courseId);
+                
+                // Sonra kursu sil
+                string deleteCourseQuery = "DELETE FROM Courses WHERE Id = @Id";
+                var deleteCourseCmd = new NpgsqlCommand(deleteCourseQuery, con);
+                deleteCourseCmd.Parameters.AddWithValue("@Id", courseId);
+                
+                con.Open();
+                deleteVideosCmd.ExecuteNonQuery();
+                deleteCourseCmd.ExecuteNonQuery();
+            }
+        }
+        
+        // Tüm kursları getir
+        public List<Course> GetAllCourses()
+        {
+            List<Course> courses = new List<Course>();
+            
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Courses ORDER BY CreatedDate DESC";
+                var cmd = new NpgsqlCommand(query, con);
+                
+                con.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        courses.Add(new Course
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            Description = reader.GetString(reader.GetOrdinal("Description")),
+                            ImageUrl = reader["ImageUrl"] == DBNull.Value ? null : reader.GetString(reader.GetOrdinal("ImageUrl")),
+                            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                            IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                            AdminId = reader.GetInt32(reader.GetOrdinal("AdminId"))
+                        });
+                    }
+                }
+            }
+            
+            return courses;
+        }
+        
+        // Belirli bir kursu getir
+        public Course GetCourseById(int courseId)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Courses WHERE Id = @Id";
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Id", courseId);
+                
+                con.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Course
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            Description = reader.GetString(reader.GetOrdinal("Description")),
+                            ImageUrl = reader["ImageUrl"] == DBNull.Value ? null : reader.GetString(reader.GetOrdinal("ImageUrl")),
+                            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                            IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                            AdminId = reader.GetInt32(reader.GetOrdinal("AdminId"))
+                        };
+                    }
+                }
+            }
+            
+            return null;
+        }
+        
+        // Video dersi ekleme
+        public int AddVideoLesson(VideoLesson video)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = @"
+                    INSERT INTO VideoLessons (Title, Description, VideoUrl, OrderIndex, UploadDate, IsActive, CourseId) 
+                    VALUES (@Title, @Description, @VideoUrl, @OrderIndex, @UploadDate, @IsActive, @CourseId)
+                    RETURNING Id";
+                
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Title", video.Title);
+                cmd.Parameters.AddWithValue("@Description", video.Description);
+                cmd.Parameters.AddWithValue("@VideoUrl", video.VideoUrl);
+                cmd.Parameters.AddWithValue("@OrderIndex", video.OrderIndex);
+                cmd.Parameters.AddWithValue("@UploadDate", video.UploadDate);
+                cmd.Parameters.AddWithValue("@IsActive", video.IsActive);
+                cmd.Parameters.AddWithValue("@CourseId", video.CourseId);
+
+                con.Open();
+                return (int)cmd.ExecuteScalar();
+            }
+        }
+        
+        // Video dersi güncelleme
+        public void UpdateVideoLesson(VideoLesson video)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = @"
+                    UPDATE VideoLessons 
+                    SET Title = @Title, 
+                        Description = @Description, 
+                        VideoUrl = @VideoUrl, 
+                        OrderIndex = @OrderIndex, 
+                        IsActive = @IsActive 
+                    WHERE Id = @Id";
+                
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Id", video.Id);
+                cmd.Parameters.AddWithValue("@Title", video.Title);
+                cmd.Parameters.AddWithValue("@Description", video.Description);
+                cmd.Parameters.AddWithValue("@VideoUrl", video.VideoUrl);
+                cmd.Parameters.AddWithValue("@OrderIndex", video.OrderIndex);
+                cmd.Parameters.AddWithValue("@IsActive", video.IsActive);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+        
+        // Video dersi silme
+        public void DeleteVideoLesson(int videoId)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "DELETE FROM VideoLessons WHERE Id = @Id";
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Id", videoId);
+                
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+        
+        // Bir kursa ait tüm video dersleri getir
+        public List<VideoLesson> GetVideoLessonsByCourseId(int courseId)
+        {
+            List<VideoLesson> videos = new List<VideoLesson>();
+            
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM VideoLessons WHERE CourseId = @CourseId ORDER BY OrderIndex";
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@CourseId", courseId);
+                
+                con.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        videos.Add(new VideoLesson
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Title = reader.GetString(reader.GetOrdinal("Title")),
+                            Description = reader.GetString(reader.GetOrdinal("Description")),
+                            VideoUrl = reader.GetString(reader.GetOrdinal("VideoUrl")),
+                            OrderIndex = reader.GetInt32(reader.GetOrdinal("OrderIndex")),
+                            UploadDate = reader.GetDateTime(reader.GetOrdinal("UploadDate")),
+                            IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                            CourseId = reader.GetInt32(reader.GetOrdinal("CourseId"))
+                        });
+                    }
+                }
+            }
+            
+            return videos;
+        }
+        
+        // Belirli bir video dersi getir
+        public VideoLesson GetVideoLessonById(int videoId)
+        {
+            using (var con = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM VideoLessons WHERE Id = @Id";
+                var cmd = new NpgsqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Id", videoId);
+                
+                con.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new VideoLesson
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Title = reader.GetString(reader.GetOrdinal("Title")),
+                            Description = reader.GetString(reader.GetOrdinal("Description")),
+                            VideoUrl = reader.GetString(reader.GetOrdinal("VideoUrl")),
+                            OrderIndex = reader.GetInt32(reader.GetOrdinal("OrderIndex")),
+                            UploadDate = reader.GetDateTime(reader.GetOrdinal("UploadDate")),
+                            IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                            CourseId = reader.GetInt32(reader.GetOrdinal("CourseId"))
+                        };
+                    }
+                }
+            }
+            
+            return null;
+        }
     }
 }

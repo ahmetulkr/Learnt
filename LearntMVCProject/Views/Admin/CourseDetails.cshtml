@@ -1,6 +1,6 @@
-﻿@model List<LearntMVCProject.Models.Course>
+@model LearntMVCProject.Models.Course
 @{
-    ViewData["Title"] = "Admin Paneli";
+    ViewData["Title"] = "Ders Detayları";
     Layout = null;
 }
 
@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Paneli - Dersler</title>
+    <title>@Model.Name - Ders Detayları</title>
     <link rel="icon" type="image/png" href="~/aa.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -71,50 +71,57 @@
             padding: 20px;
         }
         
-        .card {
-            transition: transform 0.3s;
+        .course-header {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
             margin-bottom: 20px;
         }
         
-        .card:hover {
+        .course-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .video-item {
+            transition: transform 0.3s;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .video-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
-        .dropdown-menu {
-            border-radius: 0;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .dropdown-submenu {
-            position: relative;
-        }
-        
-        .dropdown-submenu .dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -1px;
-        }
-        
-        .course-image {
-            height: 180px;
-            object-fit: cover;
-        }
-        
-        .course-actions {
+        .video-actions {
             position: absolute;
             top: 10px;
             right: 10px;
             display: none;
         }
         
-        .card:hover .course-actions {
+        .video-item:hover .video-actions {
             display: block;
+        }
+        
+        .video-thumbnail {
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .video-order {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -196,39 +203,77 @@
         <!-- Main Content -->
         <div class="content-wrapper">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Dersler</h1>
-                <a href="@Url.Action("AddCourse", "Admin")" class="btn buttoncolor">
-                    <i class="bi bi-plus-lg"></i> Yeni Ders Ekle
+                <h1>Ders Detayları</h1>
+                <a href="@Url.Action("AdminPage", "Admin")" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
                 </a>
             </div>
             
-            @if (Model != null && Model.Any())
+            <div class="course-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "/images/default-course.jpg" : Model.ImageUrl)" class="course-image" alt="@Model.Name">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2>@Model.Name</h2>
+                            <div>
+                                <a href="@Url.Action("EditCourse", "Admin", new { id = Model.Id })" class="btn btn-outline-primary me-2">
+                                    <i class="bi bi-pencil me-1"></i> Düzenle
+                                </a>
+                                <a href="@Url.Action("DeleteCourse", "Admin", new { id = Model.Id })" class="btn btn-outline-danger" onclick="return confirm('Bu dersi silmek istediğinizden emin misiniz?');">
+                                    <i class="bi bi-trash me-1"></i> Sil
+                                </a>
+                            </div>
+                        </div>
+                        <p>@Model.Description</p>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <span class="badge bg-secondary me-2">Oluşturulma: @Model.CreatedDate.ToString("dd.MM.yyyy")</span>
+                                <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">@(Model.IsActive ? "Aktif" : "Pasif")</span>
+                            </div>
+                            <a href="@Url.Action("AddVideo", "Admin", new { courseId = Model.Id })" class="btn buttoncolor">
+                                <i class="bi bi-plus-lg me-1"></i> Video Ekle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mb-3">Video Dersler</h3>
+            
+            @if (Model.VideoLessons != null && Model.VideoLessons.Any())
             {
                 <div class="row">
-                    @foreach (var course in Model)
+                    @foreach (var video in Model.VideoLessons.OrderBy(v => v.OrderIndex))
                     {
                         <div class="col-md-4">
-                            <div class="card h-100">
-                                <div class="course-actions">
+                            <div class="card video-item">
+                                <div class="video-actions">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="@Url.Action("EditCourse", "Admin", new { id = course.Id })"><i class="bi bi-pencil me-2"></i>Düzenle</a></li>
-                                            <li><a class="dropdown-item" href="@Url.Action("DeleteCourse", "Admin", new { id = course.Id })" onclick="return confirm('Bu dersi silmek istediğinizden emin misiniz?');"><i class="bi bi-trash me-2"></i>Sil</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("EditVideo", "Admin", new { id = video.Id })"><i class="bi bi-pencil me-2"></i>Düzenle</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("DeleteVideo", "Admin", new { id = video.Id })" onclick="return confirm('Bu videoyu silmek istediğinizden emin misiniz?');"><i class="bi bi-trash me-2"></i>Sil</a></li>
                                         </ul>
                                     </div>
                                 </div>
-                                <img src="@(string.IsNullOrEmpty(course.ImageUrl) ? "/images/default-course.jpg" : course.ImageUrl)" class="card-img-top course-image" alt="@course.Name">
+                                <div class="position-relative">
+                                    <img src="@(video.VideoUrl.Contains("youtube") ? $"https://img.youtube.com/vi/{GetYoutubeVideoId(video.VideoUrl)}/hqdefault.jpg" : "/images/default-video.jpg")" class="card-img-top video-thumbnail" alt="@video.Title">
+                                    <div class="video-order">
+                                        <i class="bi bi-collection-play me-1"></i> Ders @video.OrderIndex
+                                    </div>
+                                </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">@course.Name</h5>
-                                    <p class="card-text">@(course.Description.Length > 100 ? course.Description.Substring(0, 100) + "..." : course.Description)</p>
+                                    <h5 class="card-title">@video.Title</h5>
+                                    <p class="card-text">@(video.Description.Length > 80 ? video.Description.Substring(0, 80) + "..." : video.Description)</p>
                                 </div>
                                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">Oluşturulma: @course.CreatedDate.ToString("dd.MM.yyyy")</small>
-                                    <a href="@Url.Action("CourseDetails", "Admin", new { id = course.Id })" class="btn btn-sm buttoncolor">
-                                        <i class="bi bi-eye me-1"></i> Detaylar
+                                    <small class="text-muted">Eklenme: @video.UploadDate.ToString("dd.MM.yyyy")</small>
+                                    <a href="@video.VideoUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-play-fill me-1"></i> İzle
                                     </a>
                                 </div>
                             </div>
@@ -239,7 +284,7 @@
             else
             {
                 <div class="alert alert-info">
-                    <i class="bi bi-info-circle me-2"></i> Henüz hiç ders eklenmemiş. Yeni bir ders eklemek için "Yeni Ders Ekle" butonuna tıklayın.
+                    <i class="bi bi-info-circle me-2"></i> Bu derse henüz video eklenmemiş. Video eklemek için "Video Ekle" butonuna tıklayın.
                 </div>
             }
         </div>
@@ -255,3 +300,25 @@
         window.location.href = "/Home/Home";
     </script>
 }
+
+@functions {
+    public string GetYoutubeVideoId(string url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return "";
+            
+        // YouTube URL'sinden video ID'sini çıkar
+        if (url.Contains("youtu.be"))
+        {
+            return url.Split('/').Last();
+        }
+        else if (url.Contains("youtube.com/watch"))
+        {
+            var uri = new Uri(url);
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            return query["v"];
+        }
+        
+        return "";
+    }
+} 

@@ -1,0 +1,307 @@
+@model LearntMVCProject.Models.VideoLesson
+@{
+    ViewData["Title"] = "Video Ekle";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Ekle - @ViewBag.CourseName</title>
+    <link rel="icon" type="image/png" href="~/aa.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: #000000;
+            color: white;
+            position: fixed;
+            width: 250px;
+        }
+
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            color: white;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #00ff62;
+            color: rgb(0, 0, 0);
+        }
+
+        .sidebar .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .icons {
+            color: #00ff62;
+        }
+
+        .user-profile-border {
+            border: 1px solid #00ff62;
+        }
+
+        .logo {
+            margin-left: 68px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .buttoncolor {
+            background-color: #00ff62;
+            color: rgb(0, 0, 0);
+        }
+        
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #00ff62;
+            box-shadow: 0 0 0 0.25rem rgba(0, 255, 98, 0.25);
+        }
+        
+        .video-preview {
+            width: 100%;
+            height: 250px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .video-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-preview-placeholder {
+            text-align: center;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column flex-shrink-0 p-3">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-4">
+                    <img src="~/aa.png" class="logo" alt="logo">
+                </span>
+            </a>
+            <div class="user-profile d-flex align-items-center mb-3" style="margin: 1rem 0;">
+                <img src="https://avatars.githubusercontent.com/u/73017111?v=4" alt="Ahmet" class="me-2 user-profile-border">
+                <div>
+                    <div>Ahmet Ülker</div>
+                    <small class="text-muted">Admin</small>
+                </div>
+                <a href="https://github.com/ahmetulkr" class="ms-auto">
+                    <i class="fab fa-github icons"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/ahmetulker/" class="ms-2">
+                    <i class="fab fa-linkedin icons"></i>
+                </a>
+            </div>
+            <hr>
+
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="@Url.Action("AdminPage", "Admin")" class="nav-link active">
+                        <i class="bi bi-grid-fill me-2"></i>
+                        Dersler
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white" data-bs-toggle="collapse" data-bs-target="#courseSubmenu">
+                        <i class="bi bi-book-fill me-2"></i>
+                        Ders Yönetimi
+                        <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <div class="collapse" id="courseSubmenu">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a href="@Url.Action("AddCourse", "Admin")" class="nav-link text-white">
+                                    <i class="bi bi-plus-circle me-2"></i>
+                                    Yeni Ders Ekle
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-people-fill me-2"></i>
+                        Kullanıcılar
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-gear-fill me-2"></i>
+                        Ayarlar
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <strong>@Context.Session.GetString("AdminUser")</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#">Profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Home", "Home")">Çıkış Yap</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Video Ekle - @ViewBag.CourseName</h1>
+                <a href="@Url.Action("CourseDetails", "Admin", new { id = Model.CourseId })" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                </a>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="video-preview" id="videoPreview">
+                        <div class="video-preview-placeholder">
+                            <i class="bi bi-camera-video fs-1"></i>
+                            <p>Video URL'si girildiğinde önizleme burada görünecek</p>
+                        </div>
+                    </div>
+                    
+                    <form method="post" action="@Url.Action("AddVideo", "Admin")">
+                        <input type="hidden" name="CourseId" value="@Model.CourseId" />
+                        <input type="hidden" name="OrderIndex" value="@Model.OrderIndex" />
+                        
+                        <div class="mb-3">
+                            <label for="Title" class="form-label">Video Başlığı</label>
+                            <input type="text" class="form-control" id="Title" name="Title" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="Description" name="Description" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="VideoUrl" class="form-label">Video URL</label>
+                            <input type="url" class="form-control" id="VideoUrl" name="VideoUrl" placeholder="https://www.youtube.com/watch?v=..." required onchange="updateVideoPreview()">
+                            <div class="form-text">YouTube veya diğer video platformlarından bir video URL'si girin.</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="IsActive" name="IsActive" checked>
+                                <label class="form-check-label" for="IsActive">
+                                    Aktif
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="reset" class="btn btn-outline-secondary me-md-2" onclick="resetVideoPreview()">
+                                <i class="bi bi-x-circle me-1"></i> Temizle
+                            </button>
+                            <button type="submit" class="btn buttoncolor">
+                                <i class="bi bi-plus-circle me-1"></i> Video Ekle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function getYoutubeVideoId(url) {
+            if (!url) return null;
+            
+            // YouTube URL'sinden video ID'sini çıkar
+            let videoId = null;
+            
+            if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1];
+                if (videoId.includes('?')) {
+                    videoId = videoId.split('?')[0];
+                }
+            } else if (url.includes('youtube.com/watch')) {
+                const urlParams = new URLSearchParams(new URL(url).search);
+                videoId = urlParams.get('v');
+            } else if (url.includes('youtube.com/embed/')) {
+                videoId = url.split('youtube.com/embed/')[1];
+                if (videoId.includes('?')) {
+                    videoId = videoId.split('?')[0];
+                }
+            }
+            
+            return videoId;
+        }
+        
+        function updateVideoPreview() {
+            const videoUrl = document.getElementById('VideoUrl').value;
+            const videoPreview = document.getElementById('videoPreview');
+            
+            if (videoUrl) {
+                const videoId = getYoutubeVideoId(videoUrl);
+                
+                if (videoId) {
+                    // YouTube videosu
+                    videoPreview.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+                } else {
+                    // Diğer video URL'leri
+                    videoPreview.innerHTML = `
+                        <div class="video-preview-placeholder">
+                            <i class="bi bi-link-45deg fs-1"></i>
+                            <p>Video URL: ${videoUrl}</p>
+                        </div>
+                    `;
+                }
+            } else {
+                resetVideoPreview();
+            }
+        }
+        
+        function resetVideoPreview() {
+            const videoPreview = document.getElementById('videoPreview');
+            videoPreview.innerHTML = `
+                <div class="video-preview-placeholder">
+                    <i class="bi bi-camera-video fs-1"></i>
+                    <p>Video URL'si girildiğinde önizleme burada görünecek</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+@if (Context.Session.GetString("Role") != "admin")
+{
+    <script>
+        window.location.href = "/Home/Home";
+    </script>
+} 
